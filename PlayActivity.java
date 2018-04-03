@@ -1,0 +1,607 @@
+package com.folashocky.add_subtract_multiply;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Created by folas on 17/09/2017.
+ */
+
+public class PlayActivity extends AppCompatActivity
+{
+    private String category;
+    private Bundle sendingBundle;
+    private Random random;
+    private ArrayList<String> RandomString;
+    private String difficulty;
+    private TextView txtNum1,txtNum2,txtOperator;
+    private EditText etxtAnswer;
+    private TextView txtCorrect,txtIncorrect,txtCountDown;
+    private Button btnConfirm;
+    private Integer Num1, Num2;
+    private RotateAnimation animRotateBegin;
+    private AlphaAnimation animFadeOut,animFadeIn;
+    private Integer Answer;
+    private Random otherRandom;
+    private int correct,incorrect;
+    private int QuestionCount,QuestionNumber;
+    private TextView txtQuestion;
+    private Intent intent;
+    private Bundle resultsBundle;
+    private List<Integer> numberlist=new ArrayList<Integer>(1);
+    private Integer UserAnswer;
+    private SharedPreferences sharedPreferences;
+    private int minutes,Seconds;
+    private TextView[] textViews;
+    private Long minasLong;
+    private TextView txtTime;
+    public static CountDownTimer timer;
+
+
+    @Override
+    protected void onCreate(final Bundle bundle)
+    {
+        super.onCreate(bundle);
+        setContentView(R.layout.activity_play);
+        sendingBundle = getIntent().getExtras();
+        category = sendingBundle.getString("category");
+        difficulty = sendingBundle.getString("difficulty");
+        txtNum1 = (TextView) findViewById(R.id.txtNum1);
+        txtNum2 = (TextView) findViewById(R.id.txtNum2);
+        txtOperator = (TextView) findViewById(R.id.txtOperator);
+        etxtAnswer = (EditText) findViewById(R.id.etxtAnswer);
+        btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        txtCorrect = (TextView) findViewById(R.id.txtCorrect);
+        txtIncorrect = (TextView) findViewById(R.id.txtIncorrect);
+        txtQuestion = (TextView) findViewById(R.id.txtQuestion);
+        txtTime = (TextView)findViewById(R.id.txtTime);
+        txtCountDown = (TextView)findViewById(R.id.txtCountDown);
+        textViews = new TextView[]{txtNum1,txtNum2,txtOperator,etxtAnswer,txtCorrect,txtIncorrect,txtQuestion,txtTime};
+        random = new Random();
+        RandomString = new ArrayList<>(1);
+
+        sharedPreferences = getSharedPreferences("Stats",MODE_PRIVATE);
+        minutes = sharedPreferences.getInt("minutes",1);
+
+
+        btnConfirm.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+
+        animRotateBegin = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        animFadeIn = new AlphaAnimation(0f,1f);
+        animFadeOut = new AlphaAnimation(0f,1f);
+
+        QuestionNumber = 1;
+        correct = 0;
+        incorrect = 0;
+        intent = new Intent(PlayActivity.this, ResultsActivity.class);
+        txtIncorrect.setText("Incorrect: ");
+        txtCorrect.setText("Correct: ");
+        Answer =0;
+
+        UserAnswer=0;
+
+        otherRandom = new Random();
+        DetermineAnswer();
+        GenerateQuestion();
+        initialiseAnswer();
+
+        resultsBundle = new Bundle();
+        etxtAnswer.setHintTextColor(Color.WHITE);
+        animRotateBegin.setDuration(1000);
+        animRotateBegin.setRepeatCount(0);
+        animFadeIn.setDuration(2000);
+        animFadeOut.setDuration(2000);
+        for(TextView textView:textViews)
+        {
+            textView.setVisibility(View.INVISIBLE);
+        }
+        btnConfirm.setEnabled(false);
+        btnConfirm.setVisibility(View.INVISIBLE);
+        final Animation anim = AnimationUtils.loadAnimation(this,R.anim.animscale);
+
+        if(txtTime.getVisibility()==View.VISIBLE )
+        {
+            txtNum1.startAnimation(animRotateBegin);
+            txtOperator.startAnimation(animRotateBegin);
+            txtNum2.startAnimation(animRotateBegin);
+        }
+
+
+        QuestionCount = sharedPreferences.getInt("minutes",1)*20;
+        txtQuestion.setText("Question: " + String.valueOf(QuestionNumber) + "/" + String.valueOf(QuestionCount));
+
+        minasLong = Long.parseLong(String.valueOf(minutes));
+        if(difficulty.equals("Easy"))
+        {
+            txtNum1.setTextSize(80);
+            txtNum2.setTextSize(80);
+            txtOperator.setTextSize(80);
+        }
+        else if(difficulty.equals("Medium"))
+        {
+            txtNum1.setTextSize(70);
+            txtNum2.setTextSize(70);
+            txtOperator.setTextSize(70);
+        }
+        else
+        {
+            txtNum1.setTextSize(60);
+            txtNum2.setTextSize(60);
+            txtOperator.setTextSize(60);
+        }
+        timer = new CountDownTimer(minasLong * 60000,500)
+        {
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+
+                minasLong = millisUntilFinished;
+                minutes = (int) (minasLong / 60000);
+                Seconds =(int)(minasLong % 60000/1000);
+                 txtTime.setText("Time: " + String.valueOf(minutes) + ":" + String.valueOf(Seconds));
+
+                if(Seconds<10)
+                {
+                    txtTime.setText("Time: "+String.valueOf(minutes)+":0" +String.valueOf(Seconds));
+                }
+                if(Seconds<=-1&& minutes >-1)
+                {
+                    Seconds=59;
+                    minutes--;
+                }
+            }
+
+            @Override
+            public void onFinish()
+            {
+
+                intent.putExtras(sendingBundle);
+                resultsBundle.putString("difficulty",difficulty);
+                resultsBundle.putString("category",category);
+                resultsBundle.putInt("correct", correct);
+                resultsBundle.putInt("incorrect", incorrect);
+
+                intent.putExtras(resultsBundle);
+                this.cancel();
+
+                startActivity(intent);
+            }
+        };
+        final CountDownTimer oneSecondTimer = new CountDownTimer(500,500)
+        {
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+
+            }
+
+            @Override
+            public void onFinish()
+            {
+                this.cancel();
+                timer.start();
+            }
+        };
+
+        CountDownTimer threeSecondTimer = new CountDownTimer(5000,1000)
+        {
+            int seconds = 3000;
+            @Override
+            public void onTick(long millisUntilFinished)
+            {
+                seconds =(int)(millisUntilFinished % 60000/1000);
+                txtCountDown.startAnimation(anim);
+                txtCountDown.setText(String.valueOf(seconds-1));
+                if(seconds==1)
+                {
+                    txtCountDown.setText("GO!");
+                }
+            }
+            @Override
+            public void onFinish()
+            {
+
+                txtCountDown.setVisibility(View.INVISIBLE);
+                txtCountDown.setEnabled(false);
+
+                for(TextView textView:textViews)
+                {
+                    textView.setVisibility(View.VISIBLE);
+                }
+                btnConfirm.setEnabled(true);
+                btnConfirm.setVisibility(View.VISIBLE);
+                this.cancel();
+                oneSecondTimer.start();
+            }
+        };
+        threeSecondTimer.start();
+
+        etxtAnswer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if(actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    if (etxtAnswer.getText().toString().equals(""))
+                        etxtAnswer.setText("");
+                    QuestionNumber++;
+                    txtQuestion.setText("Question: " + String.valueOf(QuestionNumber) + "/"+ String.valueOf(QuestionCount));
+                    txtNum1.startAnimation(animFadeOut);
+                    txtNum2.startAnimation(animFadeOut);
+                    txtOperator.startAnimation(animFadeOut);
+
+                    if(animFadeOut.hasEnded())
+                    {
+                        txtNum1.startAnimation(animFadeIn);
+                        txtNum2.startAnimation(animFadeIn);
+                        txtOperator.startAnimation(animFadeIn);
+                    }
+                    DetermineAnswer();
+                    GenerateQuestion();
+
+                    initialiseAnswer();
+
+
+                    if(etxtAnswer.getText().toString().equals(""))//validation
+                    {
+                        while(UserAnswer.equals(Answer))
+                        {
+                            UserAnswer = otherRandom.nextInt(1);
+                            if(!UserAnswer.equals(Answer))
+                            {
+                                etxtAnswer.setText(String.valueOf(UserAnswer));
+                                break;
+                            }
+                        }
+                    }
+                    if(!etxtAnswer.getText().toString().equals(""))
+                        UserAnswer = Integer.parseInt(etxtAnswer.getText().toString());
+
+                    if (!numberlist.contains(UserAnswer) ||Answer == null || Num1== null || Num2 == null)
+                    {
+                        incorrect++;
+                        txtIncorrect.setText("Incorrect: " + String.valueOf(incorrect));
+                        numberlist.remove(0);
+                        etxtAnswer.setText("");
+                    }
+
+                    if (numberlist.contains(UserAnswer))
+                    {
+                        correct++;
+                        txtCorrect.setText("Correct: " + String.valueOf(correct));
+                        numberlist.remove(0);
+                        etxtAnswer.setText("");
+                    }
+
+
+                    if (QuestionNumber == QuestionCount+1)
+                    {
+                        resultsBundle.putInt("correct", correct);
+                        resultsBundle.putInt("incorrect", incorrect);
+                        resultsBundle.putString("difficulty",difficulty);
+                        resultsBundle.putString("category",category);
+                        txtQuestion.setText("");
+                        intent.putExtras(resultsBundle);
+                        timer.cancel();
+
+                        startActivity(intent);
+                    }
+                    RandomString.remove(0);
+
+                    handled=true;
+                }
+
+                return handled;
+
+            }
+
+        });
+
+        btnConfirm.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+
+            public void onClick(View v)
+            {
+
+                if (etxtAnswer.getText().toString().equals(""))
+                etxtAnswer.setText("");
+                QuestionNumber++;
+                txtQuestion.setText("Question: " + String.valueOf(QuestionNumber) + "/"+ String.valueOf(QuestionCount));
+                txtNum1.startAnimation(animFadeOut);
+                txtNum2.startAnimation(animFadeOut);
+                txtOperator.startAnimation(animFadeOut);
+
+                if(animFadeOut.hasEnded())
+                {
+                    txtNum1.startAnimation(animFadeIn);
+                    txtNum2.startAnimation(animFadeIn);
+                    txtOperator.startAnimation(animFadeIn);
+                }
+                DetermineAnswer();
+                    GenerateQuestion();
+
+                    initialiseAnswer();
+
+
+                if(etxtAnswer.getText().toString().equals(""))//validation
+                {
+                    while(UserAnswer.equals(Answer))
+                    {
+                        UserAnswer = otherRandom.nextInt(1);
+                        if(!UserAnswer.equals(Answer))
+                        {
+                            etxtAnswer.setText(String.valueOf(UserAnswer));
+                            break;
+                        }
+                    }
+                }
+                if(!etxtAnswer.getText().toString().equals(""))
+                        UserAnswer = Integer.parseInt(etxtAnswer.getText().toString());
+
+                if (!numberlist.contains(UserAnswer) ||Answer == null || Num1== null || Num2 == null)
+                {
+                    incorrect++;
+                    txtIncorrect.setText("Incorrect: " + String.valueOf(incorrect));
+                    numberlist.remove(0);
+                    etxtAnswer.setText("");
+                }
+
+                if (numberlist.contains(UserAnswer))
+                {
+                    correct++;
+                    txtCorrect.setText("Correct: " + String.valueOf(correct));
+                    numberlist.remove(0);
+                    etxtAnswer.setText("");
+                }
+
+
+                if (QuestionNumber == QuestionCount+1)
+                {
+                    resultsBundle.putInt("correct", correct);
+                    resultsBundle.putInt("incorrect", incorrect);
+                    resultsBundle.putString("difficulty",difficulty);
+                    resultsBundle.putString("category",category);
+                    txtQuestion.setText("");
+                    intent.putExtras(resultsBundle);
+                    timer.cancel();
+
+                    startActivity(intent);
+                }
+                    RandomString.remove(0);
+                }
+            });
+
+    }
+
+
+    void DetermineAnswer()
+    {
+        Random random = new Random();
+        int value = random.nextInt(3);
+        if(value == 0)
+            RandomString.add("Add");
+        else if(value == 1)
+            RandomString.add("Subtract");
+        else if(value == 2)
+            RandomString.add("Multiply");
+    }
+    void GenerateQuestion()
+    {
+        if(category.equalsIgnoreCase("Add"))
+        {
+            txtOperator.setText("+");
+            if(difficulty.equalsIgnoreCase("Easy"))
+            {
+                Num1 = random.nextInt(20);
+                Num2 = random.nextInt(20);
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+                txtNum1.setTextSize(80);
+                txtNum2.setTextSize(80);
+                txtOperator.setTextSize(80);
+            }
+            if (difficulty.equalsIgnoreCase("Medium"))
+            {
+                Num1 = random.nextInt(100)+100;
+                Num2 = random.nextInt(100)+100;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+                txtNum1.setTextSize(70);
+                txtNum2.setTextSize(70);
+                txtOperator.setTextSize(70);
+            }
+            if (difficulty.equalsIgnoreCase("Hard"))
+            {
+                Num1 = random.nextInt(1000)+500;
+                Num2 = random.nextInt(1000)+500;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+                txtNum1.setTextSize(60);
+                txtNum2.setTextSize(60);
+                txtOperator.setTextSize(60);
+            }
+        }
+        if (category.equalsIgnoreCase("Subtract"))
+        {
+            txtOperator.setText("-");
+            if(difficulty.equalsIgnoreCase("Easy"))
+            {
+                Num1 = random.nextInt(20);
+                Num2= random.nextInt(20);
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+            if (difficulty.equalsIgnoreCase("Medium"))
+            {
+                Num1 = random.nextInt(100)+100;
+                Num2 = random.nextInt(100)+100;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+            if (difficulty.equalsIgnoreCase("Hard"))
+            {
+                Num1 = random.nextInt(1000)+500;
+                Num2 = random.nextInt(1000)+500;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+
+        }
+      if (category.equalsIgnoreCase("Multiply"))
+        {
+            txtOperator.setText("x");
+            if(difficulty.equalsIgnoreCase("Easy"))
+            {
+                Num1= random.nextInt(20);
+                Num2= random.nextInt(20);
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+
+            }
+            if (difficulty.equalsIgnoreCase("Medium"))
+            {
+                Num1 = random.nextInt(100)+100;
+                Num2 = random.nextInt(100)+100;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+
+            }
+            if (difficulty.equalsIgnoreCase("Hard"))
+            {
+                Num1 = random.nextInt(1000)+500;
+                Num2 = random.nextInt(1000)+500;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+        }
+        if(category.equalsIgnoreCase("Random"))
+        {
+            if(RandomString.contains("Add"))
+            {
+                txtOperator.setText("+");
+            }
+           else if(RandomString.contains("Subtract"))
+            {
+                txtOperator.setText("-");
+            }
+            else if(RandomString.contains("Multiply"))
+            {
+                txtOperator.setText("x");
+            }
+            if(difficulty.equalsIgnoreCase("Easy"))
+            {
+                Num1 = random.nextInt(20);
+                Num2=random.nextInt(20);
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+            if(difficulty.equalsIgnoreCase("Medium"))
+            {
+                Num1 = random.nextInt(100)+100;
+                Num2=random.nextInt(100)+100;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+            if(difficulty.equalsIgnoreCase("Hard"))
+            {
+                Num1 = random.nextInt(1000)+500;
+                Num2 = random.nextInt(1000)+500;
+                txtNum1.setText(String.valueOf(Num1));
+                txtNum2.setText(String.valueOf(Num2));
+            }
+        }
+    }
+    public void initialiseAnswer()
+    {
+        if(category.equalsIgnoreCase("Add"))
+        {
+            Answer = Num1 + Num2;
+            numberlist.add(Answer);
+        }
+        else if(category.equalsIgnoreCase("Subtract"))
+        {
+            Answer = Num1 - Num2;
+            numberlist.add(Answer);
+        }
+       else if(category.equalsIgnoreCase("Multiply"))
+        {
+            Answer = Num1 * Num2;
+            numberlist.add(Answer);
+        }
+        else if(category.equalsIgnoreCase("Random"))
+        {
+            if(RandomString.contains("Add"))
+            {
+                Answer=Num1+Num2;
+                numberlist.add(Answer);
+            }
+            else if(RandomString.contains("Subtract"))
+            {
+                Answer = Num1-Num2;
+                numberlist.add(Answer);
+            }
+            else if(RandomString.contains("Multiply"))
+            {
+                Answer = Num1*Num2;
+                numberlist.add(Answer);
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        timer.cancel();
+        startActivity(new Intent(PlayActivity.this,MainActivity.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+
+        getMenuInflater().inflate(R.menu.home_options,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.spinnerhome:
+                timer.cancel();
+                startActivity(new Intent(PlayActivity.this,OptionsActivity.class));
+                return true;
+            case R.id.btnback:
+                timer.cancel();
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+}
