@@ -13,10 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * Created by folas on 17/09/2017.
- */
-
 public class DifficultyActivity extends AppCompatActivity {
    private Bundle newBundle;
    private String category;
