@@ -23,10 +23,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by folas on 20/01/2018.
- */
-
 public class HighScoresActivity extends AppCompatActivity {
 
     private TextView txtCategory,txtName,txtScore;
