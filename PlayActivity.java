@@ -25,12 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by folas on 17/09/2017.
- */
-
-public class PlayActivity extends AppCompatActivity
-{
+public class PlayActivity extends AppCompatActivity {
     private String category;
     private Bundle sendingBundle;
     private Random random;
@@ -122,51 +117,41 @@ public class PlayActivity extends AppCompatActivity
             txtOperator.startAnimation(animRotateBegin);
             txtNum2.startAnimation(animRotateBegin);
         }
-
-
         QuestionCount = sharedPreferences.getInt("minutes", 1) * 20;
         txtQuestion.setText("Question: " + String.valueOf(QuestionNumber) + "/" + String.valueOf(QuestionCount));
-
         minasLong = Long.parseLong(String.valueOf(minutes));
-        switch (difficulty)
-        {
+        switch (difficulty) {
             case "Easy":
-            txtNum1.setTextSize(80);
-            txtNum2.setTextSize(80);
-            txtOperator.setTextSize(80);
+                txtNum1.setTextSize(80);
+                txtNum2.setTextSize(80);
+                txtOperator.setTextSize(80);
             break;
             case "Medium":
-
-            txtNum1.setTextSize(70);
-            txtNum2.setTextSize(70);
-            txtOperator.setTextSize(70);
+                txtNum1.setTextSize(70);
+                txtNum2.setTextSize(70);
+                txtOperator.setTextSize(70);
             break;
 
             case"Hard":
-
-            txtNum1.setTextSize(60);
-            txtNum2.setTextSize(60);
-            txtOperator.setTextSize(60);
+                txtNum1.setTextSize(60);
+                txtNum2.setTextSize(60);
+                txtOperator.setTextSize(60);
             break;
 
         }
-        timer = new CountDownTimer(minasLong * 60000, 500)
-        {
+        timer = new CountDownTimer(minasLong * 60000, 500) {
             @Override
-            public void onTick(long millisUntilFinished)
-            {
+            public void onTick(long millisUntilFinished) {
 
                 minasLong = millisUntilFinished;
                 minutes = (int) (minasLong / 60000);
                 Seconds = (int) (minasLong % 60000 / 1000);
                 txtTime.setText("Time: " + String.valueOf(minutes) + ":" + String.valueOf(Seconds));
 
-                if (Seconds < 10)
-                {
+                if (Seconds < 10) {
                     txtTime.setText("Time: " + String.valueOf(minutes) + ":0" + String.valueOf(Seconds));
                 }
-                if (Seconds <= -1 && minutes > -1)
-                {
+                if (Seconds <= -1 && minutes > -1) {
                     Seconds = 59;
                     minutes--;
                 }
@@ -189,8 +174,7 @@ public class PlayActivity extends AppCompatActivity
         };
         final CountDownTimer oneSecondTimer = new CountDownTimer(500, 500) {
             @Override
-            public void onTick(long millisUntilFinished)
-            {
+            public void onTick(long millisUntilFinished) {
 
             }
 
@@ -209,22 +193,19 @@ public class PlayActivity extends AppCompatActivity
                 seconds = (int) (millisUntilFinished % 60000 / 1000);
                 txtCountDown.startAnimation(anim);
                 txtCountDown.setText(String.valueOf(seconds - 1));
-                if (seconds == 1) {
-                    txtCountDown.setText("GO!");
-                }
+                if (seconds == 1) 
+                   txtCountDown.setText("GO!");
             }
 
             @Override
-            public void onFinish()
-            {
+            public void onFinish() {
 
                 txtCountDown.setVisibility(View.INVISIBLE);
                 txtCountDown.setEnabled(false);
 
                 for (TextView textView : textViews)
-                {
                     textView.setVisibility(View.VISIBLE);
-                }
+                
                 btnConfirm.setEnabled(true);
                 btnConfirm.setVisibility(View.VISIBLE);
                 this.cancel();
@@ -234,15 +215,12 @@ public class PlayActivity extends AppCompatActivity
 
         threeSecondTimer.start();
 
-        etxtAnswer.setOnEditorActionListener(new TextView.OnEditorActionListener()
-        {
+        etxtAnswer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
 
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-            {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE)
-                {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     onClickLogic();
                     handled = true;
                 }
@@ -250,12 +228,10 @@ public class PlayActivity extends AppCompatActivity
             }
         });
 
-        btnConfirm.setOnClickListener(new View.OnClickListener()
-        {
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
 
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onClickLogic();
             }
         });
@@ -263,17 +239,13 @@ public class PlayActivity extends AppCompatActivity
 
 
 
-    private void onClickLogic()
-    {
-        if(!etxtAnswer.getText().toString().equals(""))
-        userAnswer = Integer.parseInt(etxtAnswer.getText().toString());
-       else//validation
-        {
-            while (userAnswer == actualAnswer)
-            {
+    private void onClickLogic() {
+       if(!etxtAnswer.getText().toString().equals(""))
+           userAnswer = Integer.parseInt(etxtAnswer.getText().toString());
+       else {
+            while (userAnswer == actualAnswer) {
                 userAnswer = otherRandom.nextInt(1);
-                if (userAnswer != actualAnswer)
-                {
+                if (userAnswer != actualAnswer) {
                     etxtAnswer.setText(String.valueOf(userAnswer));
                     break;
                 }
@@ -288,29 +260,25 @@ public class PlayActivity extends AppCompatActivity
         txtNum2.startAnimation(animFadeOut);
         txtOperator.startAnimation(animFadeOut);
 
-        if (animFadeOut.hasEnded())
-        {
+        if (animFadeOut.hasEnded()) {
             txtNum1.startAnimation(animFadeIn);
             txtNum2.startAnimation(animFadeIn);
             txtOperator.startAnimation(animFadeIn);
         }
 
-        if (userAnswer == getActualAnswer())
-        {
+        if (userAnswer == getActualAnswer()) {
             correct++;
             txtCorrect.setText("Correct: " + String.valueOf(correct));
             numberlist.clear();
             etxtAnswer.setText("");
         }
-        else if (userAnswer != getActualAnswer())
-        {
+        else if (userAnswer != getActualAnswer()) {
             incorrect++;
             txtIncorrect.setText("Incorrect: " + String.valueOf(incorrect));
             numberlist.clear();
             etxtAnswer.setText("");
         }
-        if (QuestionNumber == QuestionCount + 1)
-        {
+        if (QuestionNumber == QuestionCount + 1) {
             resultsBundle.putInt("correct", correct);
             resultsBundle.putInt("incorrect", incorrect);
             resultsBundle.putString("difficulty", difficulty);
@@ -326,16 +294,13 @@ public class PlayActivity extends AppCompatActivity
         GenerateQuestion();
         initialiseAnswer();
         userAnswer = Integer.MIN_VALUE;
-
     }
 
 
-    private void DetermineAnswer()
-    {
+    private void DetermineAnswer() {
         Random random = new Random();
         int value = random.nextInt(3);
-        if(category.equals("Random"))
-        {
+        if(category.equals("Random")) {
             if(value == 0)
                 RandomString.add("Add");
             else if(value == 1)
@@ -344,13 +309,10 @@ public class PlayActivity extends AppCompatActivity
                 RandomString.add("Multiply");
         }
     }
-    private void GenerateQuestion()
-    {
-        if(category.equalsIgnoreCase("Add"))
-        {
+    private void GenerateQuestion() {
+        if(category.equalsIgnoreCase("Add")) {
             txtOperator.setText("+");
-            if(difficulty.equalsIgnoreCase("Easy"))
-            {
+            if(difficulty.equalsIgnoreCase("Easy")) {
                 numOne = random.nextInt(20);
                 numTwo = random.nextInt(20);
                 txtNum1.setText(String.valueOf(numOne));
@@ -359,8 +321,7 @@ public class PlayActivity extends AppCompatActivity
                 txtNum2.setTextSize(80);
                 txtOperator.setTextSize(80);
             }
-            if (difficulty.equalsIgnoreCase("Medium"))
-            {
+            if (difficulty.equalsIgnoreCase("Medium")) {
                 numOne = random.nextInt(100)+100;
                 numTwo = random.nextInt(100)+100;
                 txtNum1.setText(String.valueOf(numOne));
@@ -369,8 +330,7 @@ public class PlayActivity extends AppCompatActivity
                 txtNum2.setTextSize(70);
                 txtOperator.setTextSize(70);
             }
-            if (difficulty.equalsIgnoreCase("Hard"))
-            {
+            if (difficulty.equalsIgnoreCase("Hard")) {
                 numOne = random.nextInt(1000)+500;
                 numTwo = random.nextInt(1000)+500;
                 txtNum1.setText(String.valueOf(numOne));
@@ -380,25 +340,21 @@ public class PlayActivity extends AppCompatActivity
                 txtOperator.setTextSize(60);
             }
         }
-        if (category.equalsIgnoreCase("Subtract"))
-        {
+        if (category.equalsIgnoreCase("Subtract")) {
             txtOperator.setText("-");
-            if(difficulty.equalsIgnoreCase("Easy"))
-            {
+            if(difficulty.equalsIgnoreCase("Easy")) {
                 numOne = random.nextInt(20);
                 numTwo = random.nextInt(20);
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
             }
-            if (difficulty.equalsIgnoreCase("Medium"))
-            {
+            if (difficulty.equalsIgnoreCase("Medium")) {
                 numOne = random.nextInt(100)+100;
                 numTwo = random.nextInt(100)+100;
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
             }
-            if (difficulty.equalsIgnoreCase("Hard"))
-            {
+            if (difficulty.equalsIgnoreCase("Hard")) {
                 numOne = random.nextInt(1000)+500;
                 numTwo = random.nextInt(1000)+500;
                 txtNum1.setText(String.valueOf(numOne));
@@ -406,63 +362,50 @@ public class PlayActivity extends AppCompatActivity
             }
 
         }
-      if (category.equalsIgnoreCase("Multiply"))
-        {
+      if (category.equalsIgnoreCase("Multiply")) {
             txtOperator.setText("x");
-            if(difficulty.equalsIgnoreCase("Easy"))
-            {
+            if(difficulty.equalsIgnoreCase("Easy")) {
                 numOne = random.nextInt(20);
                 numTwo = random.nextInt(20);
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
 
             }
-            if (difficulty.equalsIgnoreCase("Medium"))
-            {
+            if (difficulty.equalsIgnoreCase("Medium")) {
                 numOne = random.nextInt(100)+100;
                 numTwo = random.nextInt(100)+100;
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
 
             }
-            if (difficulty.equalsIgnoreCase("Hard"))
-            {
+            if (difficulty.equalsIgnoreCase("Hard")) {
                 numOne = random.nextInt(1000)+500;
                 numTwo = random.nextInt(1000)+500;
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
             }
         }
-        if(category.equalsIgnoreCase("Random"))
-        {
+        if(category.equalsIgnoreCase("Random")) {
             if(RandomString.contains("Add"))
-            {
                 txtOperator.setText("+");
-            }
            else if(RandomString.contains("Subtract"))
-            {
                 txtOperator.setText("-");
-            }
             else if(RandomString.contains("Multiply"))
-            {
                 txtOperator.setText("x");
-            }
-            if(difficulty.equalsIgnoreCase("Easy"))
-            {
+            
+            if(difficulty.equalsIgnoreCase("Easy")) {
                 numOne = random.nextInt(20);
                 numTwo =random.nextInt(20);
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
             }
-            if(difficulty.equalsIgnoreCase("Medium"))
-            {
+            if(difficulty.equalsIgnoreCase("Medium")) {
                 numOne = random.nextInt(100)+100;
                 numTwo =random.nextInt(100)+100;
                 txtNum1.setText(String.valueOf(numOne));
                 txtNum2.setText(String.valueOf(numTwo));
             }
-            if(difficulty.equalsIgnoreCase("Hard"))
-            {
+            if(difficulty.equalsIgnoreCase("Hard")) {
                 numOne = random.nextInt(1000)+500;
                 numTwo = random.nextInt(1000)+500;
                 txtNum1.setText(String.valueOf(numOne));
@@ -470,62 +413,44 @@ public class PlayActivity extends AppCompatActivity
             }
         }
     }
-    public int getActualAnswer()
-    {
+    public int getActualAnswer() {
         return actualAnswer;
     }
-    private void initialiseAnswer()
-    {
+    private void initialiseAnswer() {
         if(category.equalsIgnoreCase("Add"))
-        {
             actualAnswer = numOne + numTwo;
-        }
+        
         else if(category.equalsIgnoreCase("Subtract"))
-        {
             actualAnswer = numOne - numTwo;
-        }
+        
        else if(category.equalsIgnoreCase("Multiply"))
-        {
             actualAnswer = numOne * numTwo;
-        }
-        else
-        {
+        else {
             if(RandomString.contains("Add"))
-            {
                 actualAnswer = numOne + numTwo;
-            }
             else if(RandomString.contains("Subtract"))
-            {
                 actualAnswer = numOne - numTwo;
-            }
             else
-            {
                 actualAnswer = numOne * numTwo;
-            }
-
         }
         numberlist.add(actualAnswer);
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         timer.cancel();
         startActivity(new Intent(PlayActivity.this,MainActivity.class));
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.home_options,menu);
         return super.onCreateOptionsMenu(menu);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.spinnerhome:
                 timer.cancel();
                 startActivity(new Intent(PlayActivity.this,OptionsActivity.class));
@@ -535,7 +460,7 @@ public class PlayActivity extends AppCompatActivity
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
 
     }
