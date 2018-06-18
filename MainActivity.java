@@ -17,8 +17,7 @@ import android.widget.Button;
 
 import static com.folashocky.add_subtract_multiply.PlayActivity.timer;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
    private Intent intent;
    private Bundle boolBundle;
    private String category;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity
    private Button btnMultiply;
    private Button btnHighScores;
    private Button btnRandom;
-   private Button[]buttons;
+   private Button[] buttons;
    static SharedPreferences sharedPreferences;
    private SharedPreferences.Editor editor;
    private AlphaAnimation FadeIn;
@@ -35,8 +34,7 @@ public class MainActivity extends AppCompatActivity
    private ActionBar actionBar;
    private Toolbar toolbar;
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnAdd = (Button)findViewById(R.id.btnAdd);
@@ -53,19 +51,15 @@ public class MainActivity extends AppCompatActivity
             timer.cancel();
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
-        for(Button button: buttons)
-        {
+        for(Button button: buttons) {
             button.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-
         }
 
         sharedPreferences = getSharedPreferences("Stats", Context.MODE_PRIVATE);
 
-      btnAdd.setOnClickListener(new View.OnClickListener()
-      {
+      btnAdd.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onClick(View v)
-          {
+          public void onClick(View v) {
               category = "Add";
               boolBundle.putString("category",category);
 
@@ -73,25 +67,19 @@ public class MainActivity extends AppCompatActivity
               startActivity(intent);
           }
       });
-        btnSubtract.setOnClickListener(new View.OnClickListener()
-        {
+        btnSubtract.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 category = "Subtract";
-
                 boolBundle.putString("category",category);
-
                 intent.putExtras(boolBundle);
                 startActivity(intent);
             }
 
         });
-        btnMultiply.setOnClickListener(new View.OnClickListener()
-        {
+        btnMultiply.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 category = "Multiply";
                 boolBundle.putString("category",category);
                 intent.putExtras(boolBundle);
@@ -101,8 +89,7 @@ public class MainActivity extends AppCompatActivity
         btnRandom.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 category = "Random";
                 boolBundle.putString("category",category);
                 intent.putExtras(boolBundle);
@@ -110,10 +97,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        btnHighScores.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        btnHighScores.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 Intent thisIntent = new Intent(MainActivity.this,HighScoresActivity.class);
                 startActivity(thisIntent);
             }
@@ -122,15 +107,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_options,menu);
-
         return true;
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case  R.id.spinnerhome:
@@ -142,8 +124,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         startActivity(new Intent(MainActivity.this,MainActivity.class));
     }
 
