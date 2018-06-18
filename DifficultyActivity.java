@@ -17,8 +17,7 @@ import android.widget.Button;
  * Created by folas on 17/09/2017.
  */
 
-public class DifficultyActivity extends AppCompatActivity
-{
+public class DifficultyActivity extends AppCompatActivity {
    private Bundle newBundle;
    private String category;
    private String difficulty;
@@ -29,16 +28,13 @@ public class DifficultyActivity extends AppCompatActivity
    private SharedPreferences sharedPreferences;
    private Bundle ThisBundle;
     @Override
-    protected void onCreate(Bundle bundle)
-    {
+    protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_difficulty);
         intent = new Intent(DifficultyActivity.this, PlayActivity.class);
         newBundle = new Bundle();
-
         ThisBundle = getIntent().getExtras();
         category = ThisBundle.getString("category");
-
         btnEasy = (Button) findViewById(R.id.btnEasy);
         btnMedium = (Button) findViewById(R.id.btnMedium);
         btnHard = (Button) findViewById(R.id.btnHard);
@@ -46,63 +42,47 @@ public class DifficultyActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences("Stats", Context.MODE_PRIVATE);
 
 
-        for (Button button : buttons)
-        {
+        for (Button button : buttons) {
             button.getBackground().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
         }
-        btnEasy.setOnClickListener(new View.OnClickListener()
-        {
+        btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 newBundle.putString("category", category);
                 difficulty = "Easy";
-
                 newBundle.putString("difficulty", difficulty);
                 intent.putExtras(newBundle);
                 startActivity(intent);
             }
         });
-        btnMedium.setOnClickListener(new View.OnClickListener()
-        {
+        btnMedium.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 newBundle.putString("category", category);
                 difficulty = "Medium";
-
                 newBundle.putString("difficulty", difficulty);
                 intent.putExtras(newBundle);
-
                 startActivity(intent);
             }
         });
-        btnHard.setOnClickListener(new View.OnClickListener()
-        {
+        btnHard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 newBundle.putString("category", category);
                 difficulty = "Hard";
-
                 newBundle.putString("difficulty", difficulty);
                 intent.putExtras(newBundle);
                 startActivity(intent);
-
             }
         });
     }
 
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home_options,menu);
         return true;
     }
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.btnback:
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
