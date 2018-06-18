@@ -17,10 +17,6 @@ import java.util.ArrayList;
 
 import static com.folashocky.add_subtract_multiply.OptionsRecylerViewAdapter.TimeLimit;
 
-/**
- * Created by folas on 27/02/2018.
- */
-
 public class OptionsActivity extends AppCompatActivity {
     ArrayList<Time> timeList;
     private static final int VERTICAL_ITEM_SPACE = 35;
