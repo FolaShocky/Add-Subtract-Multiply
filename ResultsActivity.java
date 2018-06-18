@@ -13,12 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by folas on 17/09/2017.
- */
-
-public class ResultsActivity extends AppCompatActivity
-{
+public class ResultsActivity extends AppCompatActivity {
     private TextView txtResults;
     private int correct;
     private int incorrect;
@@ -34,8 +29,7 @@ public class ResultsActivity extends AppCompatActivity
     private String Name;
     private TextView txtLength;
     @Override
-    protected void onCreate(Bundle bundle)
-    {
+    protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_results);
         txtResults = (TextView)findViewById(R.id.txtResults);
@@ -67,18 +61,17 @@ public class ResultsActivity extends AppCompatActivity
 
 
 
-        btnReturnToMainMenu.setOnClickListener(new View.OnClickListener()
-        {
+        btnReturnToMainMenu.setOnClickListener(new View.OnClickListener() 
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Name = etxtName.getText().toString().trim();
                 int Count = 0;//Used to determine number of presses
 
                     if (etxtName.getText().toString().trim().length() > 10 && etxtName.getVisibility() == View.VISIBLE) {
                         Toast.makeText(getApplicationContext(), "Your name can only be 10 characters long", Toast.LENGTH_SHORT).show();
                         Count++;
-                    } else if (Name.length() <= 10 && etxtName.getVisibility() == View.VISIBLE && !etxtName.getText().toString().trim().equals("")) {
+                    } else if (Name.length() <= 10 && etxtName.getVisibility() == View.VISIBLE && 
+                               !etxtName.getText().toString().trim().equals("")) {
                         FileLogic();
                         startActivity(intent);
                     }
@@ -87,21 +80,15 @@ public class ResultsActivity extends AppCompatActivity
                         FileLogic();
                         startActivity(intent);
                     }
-                    if (etxtName.getText().toString().trim().equals("") && etxtName.getVisibility() == View.VISIBLE)
-                    {
+                    if (etxtName.getText().toString().trim().equals("") && etxtName.getVisibility() == View.VISIBLE) 
                         Count++;
-                    }
                     if (etxtName.getText().toString().trim().equals("") && etxtName.getVisibility() == View.INVISIBLE)
-                    {
                         startActivity(intent);
-                    }
-                    if (Count == 1 && etxtName.getVisibility() == View.VISIBLE && etxtName.getText().toString().trim().equals(""))
-                    {
+                    if (Count == 1 && etxtName.getVisibility() == View.VISIBLE && etxtName.getText().toString().trim().equals("")) {
                         Toast.makeText(getApplicationContext(), "Please enter your name", Toast.LENGTH_SHORT).show();
                         etxtName.setText("Player");
                     }
-                    if (Count == 2 && etxtName.getVisibility() == View.VISIBLE && etxtName.getText().toString().trim().equals(""))
-                    {
+                    if (Count == 2 && etxtName.getVisibility() == View.VISIBLE && etxtName.getText().toString().trim().equals("")) {
                         etxtName.setText("Player");
                         FileLogic();
                         startActivity(intent);
@@ -111,48 +98,34 @@ public class ResultsActivity extends AppCompatActivity
         });
     }
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         int count = 0;
-        if(etxtName.isEnabled())
-        {
+        if(etxtName.isEnabled()) {
             count++;
             Toast.makeText(this,"Please enter your name",Toast.LENGTH_SHORT).show();
         }
-        if(count==2)
-        {
+        if(count==2) {
             etxtName.setText("Player");
             FileLogic();
             count++;
-
             startActivity(intent);
-
         }
     }
-    private boolean BeatsPreviousScore(String key)
-    {
+    private boolean BeatsPreviousScore(String key) {
          return correct > sharedPreferences.getInt(key,0);
     }
-    public void FileLogic()
-    {
+    public void FileLogic(){
         final double minsDivByQuestionCount;
         if(correct!=0)
-        {
-             minsDivByQuestionCount =  questionAmountValue /correct;
-        }
+            minsDivByQuestionCount =  questionAmountValue /correct;
         else
-        {
             minsDivByQuestionCount = 0;
-        }
-        if(difficulty.equalsIgnoreCase("Easy") && category.equalsIgnoreCase("Add"))
-        {
-            if(sharedPreferences.getInt("Add|Easy|Score",0)==0 && BeatsPreviousScore("Add|Easy|Score"))
-            {
+        if(difficulty.equalsIgnoreCase("Easy") && category.equalsIgnoreCase("Add")) {
+            if(sharedPreferences.getInt("Add|Easy|Score",0)==0 && BeatsPreviousScore("Add|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Easy|Score", correct);
                     editor.putInt(PrefStrings.ADD_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -161,15 +134,13 @@ public class ResultsActivity extends AppCompatActivity
             }
             else if (minsDivByQuestionCount <
                     sharedPreferences.getInt(PrefStrings.ADD_EASY_QUESTION_COUNT,0)/sharedPreferences.getInt("Add|Easy|Score",1)
-                    && BeatsPreviousScore("Add|Easy|Score"))
-            {
+                    && BeatsPreviousScore("Add|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
 
 
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Easy|Score", correct);
                     editor.putInt(PrefStrings.ADD_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -178,27 +149,24 @@ public class ResultsActivity extends AppCompatActivity
             editor.apply();
         }
 
-       else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Add"))
-        {
-            if(sharedPreferences.getInt("Add|Medium|Score",0)==0 && BeatsPreviousScore("Add|Medium|Score"))
-            {
+       else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Add")) {
+            if(sharedPreferences.getInt("Add|Medium|Score",0)==0 && BeatsPreviousScore("Add|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Medium|Score", correct);
                     editor.putInt(PrefStrings.ADD_MEDIUM_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
                 }
             }
-            else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.ADD_MEDIUM_QUESTION_COUNT,0)/sharedPreferences.getInt("Add|Medium|Score",1)&&BeatsPreviousScore("Add|Medium|Score"))
-            {
+            else if (minsDivByQuestionCount < 
+                     sharedPreferences.getInt(PrefStrings.ADD_MEDIUM_QUESTION_COUNT,0)/sharedPreferences.getInt("Add|Medium|Score",1)
+                     && BeatsPreviousScore("Add|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Medium|Score", correct);
                     editor.putInt(PrefStrings.ADD_MEDIUM_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -206,30 +174,23 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Add"))
-        {
-            if (sharedPreferences.getInt("Add|Hard|Score",0)==0 && BeatsPreviousScore("Add|Hard|Score"))
-            {
+        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Add")) {
+            if (sharedPreferences.getInt("Add|Hard|Score",0)==0 && BeatsPreviousScore("Add|Hard|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
-
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Hard|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Hard|Score", correct);
                     editor.putInt(PrefStrings.ADD_HARD_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
-
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.ADD_HARD_QUESTION_COUNT,0)
-                    /sharedPreferences.getInt("Add|Hard|Score",1)&&BeatsPreviousScore("Add|Hard|Score"))
-            {
+                    /sharedPreferences.getInt("Add|Hard|Score",1)&&BeatsPreviousScore("Add|Hard|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Add|Hard|Name", "Name: " + Name.trim());
                     editor.putInt("Add|Hard|Score", correct);
                     editor.putInt(PrefStrings.ADD_HARD_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -238,29 +199,23 @@ public class ResultsActivity extends AppCompatActivity
             editor.apply();
         }
 
-        if(difficulty.equalsIgnoreCase("Easy") && category.equalsIgnoreCase("Subtract"))
-
-        {
-            if(sharedPreferences.getInt("Subtract|Easy|Score",0)==0 && BeatsPreviousScore("Subtract|Easy|Score"))
-            {
+        if(difficulty.equalsIgnoreCase("Easy") && category.equalsIgnoreCase("Subtract")) {
+            if(sharedPreferences.getInt("Subtract|Easy|Score",0)==0 && BeatsPreviousScore("Subtract|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Subtract|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Subtract|Easy|Score", correct);
                     editor.putInt(PrefStrings.SUBTRACT_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.SUBTRACT_EASY_QUESTION_COUNT,0)
-                    /sharedPreferences.getInt("Subtract|Easy|Score",1)&&BeatsPreviousScore("Subtract|Easy|Score"))
-            {
+                    /sharedPreferences.getInt("Subtract|Easy|Score",1)&&BeatsPreviousScore("Subtract|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Subtract|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Subtract|Easy|Score", correct);
                     editor.putInt(PrefStrings.SUBTRACT_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -269,31 +224,26 @@ public class ResultsActivity extends AppCompatActivity
             editor.apply();
         }
 
-        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Subtract"))
-        {
-            if (sharedPreferences.getInt("Subtract|Medium|Score", 0) == 0 && BeatsPreviousScore("Subtract|Medium|Score"))
-            {
+        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Subtract")) {
+            if (sharedPreferences.getInt("Subtract|Medium|Score", 0) == 0 && BeatsPreviousScore("Subtract|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Subtract|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Subtract|Medium|Score", correct);
                     editor.putInt(PrefStrings.SUBTRACT_MEDIUM_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.SUBTRACT_MEDIUM_QUESTION_COUNT,0)
-                    / sharedPreferences.getInt("Subtract|Medium|Score", 1)&&BeatsPreviousScore("Subtract|Medium|Score"))
-            {
+                    / sharedPreferences.getInt("Subtract|Medium|Score", 1)&&BeatsPreviousScore("Subtract|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Subtract|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Subtract|Medium|Score", correct);
                     editor.putInt(PrefStrings.SUBTRACT_MEDIUM_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
@@ -301,29 +251,23 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Subtract"))
-        {
-            if (sharedPreferences.getInt("Subtract|Hard|Score", 0) == 0 && BeatsPreviousScore("Subtract|Hard|Score"))
-                {
+        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Subtract")) {
+            if (sharedPreferences.getInt("Subtract|Hard|Score", 0) == 0 && BeatsPreviousScore("Subtract|Hard|Score")) {
                     etxtName.setVisibility(View.VISIBLE);
                     etxtName.setEnabled(true);
                     txtLength.setVisibility(View.VISIBLE);
-                    if (!etxtName.getText().toString().trim().equals(""))
-                    {
+                    if (!etxtName.getText().toString().trim().equals("")) {
                         editor.putString("Subtract|Hard|Name", "Name: " + Name.trim());
                         editor.putInt("Subtract|Hard|Score", correct);
                         editor.putInt(PrefStrings.SUBTRACT_HARD_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
-
                     }
                 }
                  else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.SUBTRACT_HARD_QUESTION_COUNT,0)
-                         /sharedPreferences.getInt("Subtract|Hard|Score",1)&&BeatsPreviousScore("Subtract|Hard|Score"))
-                 {
+                         /sharedPreferences.getInt("Subtract|Hard|Score",1)&&BeatsPreviousScore("Subtract|Hard|Score")) {
                      etxtName.setVisibility(View.VISIBLE);
                      etxtName.setEnabled(true);
                      txtLength.setVisibility(View.VISIBLE);
-                     if (!etxtName.getText().toString().trim().equals(""))
-                     {
+                     if (!etxtName.getText().toString().trim().equals("")) {
                          editor.putString("Subtract|Hard|Name", "Name: " + Name.trim());
                          editor.putInt("Subtract|Hard|Score", correct);
                          editor.putInt(PrefStrings.SUBTRACT_HARD_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -331,29 +275,24 @@ public class ResultsActivity extends AppCompatActivity
                  }
             editor.apply();
         }
-        if (difficulty.equalsIgnoreCase("Easy") && category.equals("Multiply"))
-        {
-            if (sharedPreferences.getInt("Multiply|Easy|Score", 0) == 0 && BeatsPreviousScore("Multiply|Easy|Score"))
-            {
+        if (difficulty.equalsIgnoreCase("Easy") && category.equals("Multiply")) {
+            if (sharedPreferences.getInt("Multiply|Easy|Score", 0) == 0 && BeatsPreviousScore("Multiply|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Easy|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
-
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.MULTIPLY_EASY_QUESTION_COUNT,0)
-                    / sharedPreferences.getInt("Multiply|Easy|Score", 1)&& BeatsPreviousScore("Multiply|Easy|Score"))
-            {
+                    / sharedPreferences.getInt("Multiply|Easy|Score", 1)&& BeatsPreviousScore("Multiply|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Easy|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -361,15 +300,12 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Multiply"))
-        {
-            if (sharedPreferences.getInt("Multiply|Medium|Score", 0) == 0 && BeatsPreviousScore("Multiply|Medium|Score"))
-            {
+        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Multiply")) {
+            if (sharedPreferences.getInt("Multiply|Medium|Score", 0) == 0 && BeatsPreviousScore("Multiply|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Medium|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_MEDIUM_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -378,13 +314,11 @@ public class ResultsActivity extends AppCompatActivity
             }
             else if (minsDivByQuestionCount <
                     sharedPreferences.getInt(PrefStrings.MULTIPLY_MEDIUM_QUESTION_COUNT,0)
-                            /sharedPreferences.getInt("Multiply|Medium|Score",1)&& BeatsPreviousScore("Multiply|Medium|Score"))
-            {
+                            /sharedPreferences.getInt("Multiply|Medium|Score",1)&& BeatsPreviousScore("Multiply|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Medium|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_MEDIUM_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -392,29 +326,23 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Multiply"))
-        {
-            if (sharedPreferences.getInt("Multiply|Hard|Score", 0) == 0 && BeatsPreviousScore("Multiply|Hard|Score"))
-            {
+        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Multiply")) {
+            if (sharedPreferences.getInt("Multiply|Hard|Score", 0) == 0 && BeatsPreviousScore("Multiply|Hard|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Hard|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Hard|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_HARD_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
-
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.MULTIPLY_HARD_QUESTION_COUNT,0)
-                    /sharedPreferences.getInt("Multiply|Hard|Score",1)&& BeatsPreviousScore("Multiply|Hard|Score"))
-            {
+                    /sharedPreferences.getInt("Multiply|Hard|Score",1)&& BeatsPreviousScore("Multiply|Hard|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Multiply|Hard|Name", "Name: " + Name.trim());
                     editor.putInt("Multiply|Hard|Score", correct);
                     editor.putInt(PrefStrings.MULTIPLY_HARD_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -422,28 +350,23 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        if (difficulty.equalsIgnoreCase("Easy") && category.equals("Random"))
-        {
-            if (sharedPreferences.getInt("Random|Easy|Score", 0) == 0 && BeatsPreviousScore("Random|Easy|Score"))
-            {
+        if (difficulty.equalsIgnoreCase("Easy") && category.equals("Random")) {
+            if (sharedPreferences.getInt("Random|Easy|Score", 0) == 0 && BeatsPreviousScore("Random|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Random|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Random|Easy|Score", correct);
                     editor.putInt(PrefStrings.RANDOM_EASY_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.RANDOM_EASY_QUESTION_COUNT,0)
-                    /sharedPreferences.getInt("Random|Easy|Score",1)&& BeatsPreviousScore("Random|Easy|Score"))
-            {
+                    /sharedPreferences.getInt("Random|Easy|Score",1)&& BeatsPreviousScore("Random|Easy|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Random|Easy|Name", "Name: " + Name.trim());
                     editor.putInt("Random|Easy|Score", correct);
                     editor.putInt(PrefStrings.RANDOM_EASY_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -451,29 +374,23 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Random"))
-        {
-            if (sharedPreferences.getInt("Random|Medium|Score", 0) == 0 && BeatsPreviousScore("Random|Medium|Score"))
-            {
+        else if (difficulty.equalsIgnoreCase("Medium") && category.equals("Random")) {
+            if (sharedPreferences.getInt("Random|Medium|Score", 0) == 0 && BeatsPreviousScore("Random|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Random|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Random|Medium|Score", correct);
                     editor.putInt(PrefStrings.RANDOM_MEDIUM_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
-
                 }
             }
             else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.RANDOM_MEDIUM_QUESTION_COUNT,0)
-                    /sharedPreferences.getInt("Random|Medium|Score",1)&& BeatsPreviousScore("Random|Medium|Score"))
-            {
+                    /sharedPreferences.getInt("Random|Medium|Score",1)&& BeatsPreviousScore("Random|Medium|Score")) {
                 etxtName.setVisibility(View.VISIBLE);
                 etxtName.setEnabled(true);
                 txtLength.setVisibility(View.VISIBLE);
-                if (!etxtName.getText().toString().trim().equals(""))
-                {
+                if (!etxtName.getText().toString().trim().equals("")) {
                     editor.putString("Random|Medium|Name", "Name: " + Name.trim());
                     editor.putInt("Random|Medium|Score", correct);
                     editor.putInt(PrefStrings.RANDOM_MEDIUM_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -481,29 +398,24 @@ public class ResultsActivity extends AppCompatActivity
             }
             editor.apply();
         }
-        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Random"))
-        {
+        else if (difficulty.equalsIgnoreCase("Hard") && category.equals("Random")) {
 
-                if (sharedPreferences.getInt("Random|Hard|Score", 0) == 0 && BeatsPreviousScore("Random|Hard|Score"))
-                {
+                if (sharedPreferences.getInt("Random|Hard|Score", 0) == 0 && BeatsPreviousScore("Random|Hard|Score")) {
                     etxtName.setVisibility(View.VISIBLE);
                     etxtName.setEnabled(true);
                     txtLength.setVisibility(View.VISIBLE);
-                    if (!etxtName.getText().toString().trim().equals(""))
-                    {
+                    if (!etxtName.getText().toString().trim().equals("")) {
                         editor.putString("Random|Hard|Name", "Name: " + Name.trim());
                         editor.putInt("Random|Hard|Score", correct);
                         editor.putInt(PrefStrings.RANDOM_HARD_QUESTION_COUNT, sharedPreferences.getInt("minutes",1)*20);
                     }
                 }
                 else if (minsDivByQuestionCount < sharedPreferences.getInt(PrefStrings.RANDOM_HARD_QUESTION_COUNT,0)
-                        /sharedPreferences.getInt("Random|Hard|Score",1) && BeatsPreviousScore("Random|Hard|Score"))
-                {
+                        /sharedPreferences.getInt("Random|Hard|Score",1) && BeatsPreviousScore("Random|Hard|Score")) {
                     etxtName.setVisibility(View.VISIBLE);
                     etxtName.setEnabled(true);
                     txtLength.setVisibility(View.VISIBLE);
-                    if (!etxtName.getText().toString().trim().equals(""))
-                    {
+                    if (!etxtName.getText().toString().trim().equals("")) {
                         editor.putString("Random|Hard|Name", "Name: " + Name.trim());
                         editor.putInt("Random|Hard|Score", correct);
                         editor.putInt(PrefStrings.RANDOM_HARD_QUESTION_COUNT,sharedPreferences.getInt("minutes",1)*20);
@@ -515,15 +427,12 @@ public class ResultsActivity extends AppCompatActivity
 
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.spinnerhome:
                 startActivity(new Intent(ResultsActivity.this,OptionsActivity.class));
                 return true;
