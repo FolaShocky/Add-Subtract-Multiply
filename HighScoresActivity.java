@@ -27,8 +27,7 @@ import java.util.ArrayList;
  * Created by folas on 20/01/2018.
  */
 
-public class HighScoresActivity extends AppCompatActivity
-{
+public class HighScoresActivity extends AppCompatActivity {
 
     private TextView txtCategory,txtName,txtScore;
     private TextView txtDifficulty,txtAnimOperator;
@@ -53,8 +52,7 @@ public class HighScoresActivity extends AppCompatActivity
     private SharedPreferences.Editor editor;
 
     @Override
-    protected void onCreate(Bundle bundle)
-    {
+    protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_statistics);
         txtCategory = (TextView)findViewById(R.id.txtCategory);
@@ -114,108 +112,89 @@ public class HighScoresActivity extends AppCompatActivity
         arrayAdapter = new ArrayAdapter<>(this,R.layout.spinnerstyle,items);
         itemAsString = "";
         spinnerCategory.setAdapter(arrayAdapter);
-        for(RelativeLayout relativeLayout:relativeLayouts)
-            {
+        for(RelativeLayout relativeLayout:relativeLayouts) {
             relativeLayout.setBackgroundColor(Color.BLACK);
         }
-        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 itemAsString = spinnerCategory.getItemAtPosition(position).toString();
                 InitialiseUI();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
                 itemAsString ="Add|Easy";
             }
         });
 
         editor = sharedPreferences.edit();
 
-        btnMainMenu.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        btnMainMenu.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 startActivity(new Intent(HighScoresActivity.this,MainActivity.class));
             }
         });
         alertdialogbuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 editor.clear();
                 editor.apply();
                 startActivity(new Intent(HighScoresActivity.this,MainActivity.class));
             }
         });
-        alertdialogbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog,int id )
-            {
+        alertdialogbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
-
-
         alertdialogbuilder.setTitle("Reset Scores");
-         alertdialogbuilder.setMessage("Are you sure?");
+        alertdialogbuilder.setMessage("Are you sure?");
         alertdialogbuilder.setCancelable(true);
-          alertDialog =  alertdialogbuilder.create();
-
+        alertDialog =  alertdialogbuilder.create();
     }
-    private void InitialiseUI()
-    {
+    private void InitialiseUI() {
 
         txtName.setText("-----");
         txtScore.setText("0");
 
         txtCategory.setText("-----");
-        if(itemAsString.equals("Add|Easy"))
-        {
+        if(itemAsString.equals("Add|Easy")) {
             txtName.setText(sharedPreferences.getString("Add|Easy|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Add|Easy|Score",0))+"/"+String.valueOf(QuestionAmount_Add_Easy));
             txtDifficulty.setText("Difficulty: "+ "Easy");
             txtCategory.setText("Category: "+"Add");
             txtAnimOperator.setText("+");
         }
-        if(itemAsString.equals("Add|Medium"))
-        {
+        if(itemAsString.equals("Add|Medium")) {
             txtName.setText(sharedPreferences.getString("Add|Medium|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Add|Medium|Score",0))+"/"+String.valueOf(QuestionAmount_Add_Medium));
             txtDifficulty.setText("Difficulty: "+"Medium");
             txtCategory.setText("Category: "+"Add");
             txtAnimOperator.setText("+");
         }
-        if(itemAsString.equals("Add|Hard"))
-        {
+        if(itemAsString.equals("Add|Hard")) {
             txtName.setText(sharedPreferences.getString("Add|Hard|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Add|Hard|Score",0))+"/"+String.valueOf(QuestionAmount_Add_Hard));
             txtDifficulty.setText("Difficulty: "+"Hard");
             txtCategory.setText("Category: "+"Add");
             txtAnimOperator.setText("+");
         }
-        if(itemAsString.equals("Subtract|Easy"))
-        {
+        if(itemAsString.equals("Subtract|Easy")) {
             txtName.setText(sharedPreferences.getString("Subtract|Easy|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Subtract|Easy|Score",0))+"/"+String.valueOf(QuestionAmount_Subtract_Easy));
             txtDifficulty.setText("Difficulty: "+"Easy");
             txtCategory.setText("Category: "+"Subtract");
             txtAnimOperator.setText("-");
         }
-        if(itemAsString.equals("Subtract|Medium"))
-        {
+        if(itemAsString.equals("Subtract|Medium")) {
             txtName.setText(sharedPreferences.getString("Subtract|Medium|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Subtract|Medium|Score",0))+"/"+String.valueOf(QuestionAmount_Subtract_Medium));
             txtDifficulty.setText("Difficulty: "+"Medium");
             txtCategory.setText("Category: "+"Subtract");
             txtAnimOperator.setText("-");
         }
-        if(itemAsString.equals("Subtract|Hard"))
-        {
+        if(itemAsString.equals("Subtract|Hard")) {
             txtName.setText(sharedPreferences.getString("Subtract|Hard|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Subtract|Hard|Score",0))+"/"+String.valueOf(QuestionAmount_Subtract_Hard));
             txtDifficulty.setText("Difficulty: "+"Hard");
@@ -223,8 +202,7 @@ public class HighScoresActivity extends AppCompatActivity
             txtAnimOperator.setText("-");
 
         }
-        if(itemAsString.equals("Multiply|Easy"))
-        {
+        if(itemAsString.equals("Multiply|Easy")) {
             txtName.setText(sharedPreferences.getString("Multiply|Easy|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Multiply|Easy|Score",0))+"/"+String.valueOf(QuestionAmount_Multiply_Easy));
             txtDifficulty.setText("Difficulty: "+"Easy");
@@ -232,40 +210,35 @@ public class HighScoresActivity extends AppCompatActivity
             txtAnimOperator.setText("x");
 
         }
-        if(itemAsString.equals("Multiply|Medium"))
-        {
+        if(itemAsString.equals("Multiply|Medium")) {
             txtName.setText(sharedPreferences.getString("Multiply|Medium|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Multiply|Medium|Score",0))+"/"+String.valueOf(QuestionAmount_Multiply_Medium));
             txtDifficulty.setText("Difficulty: "+"Easy");
             txtCategory.setText("Category: "+"Medium");
             txtAnimOperator.setText("x");
         }
-        if(itemAsString.equals("Multiply|Hard"))
-        {
+        if(itemAsString.equals("Multiply|Hard")) {
             txtName.setText(sharedPreferences.getString("Multiply|Hard|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Multiply|Hard|Score",0))+"/"+String.valueOf(QuestionAmount_Mutiply_Hard));
             txtDifficulty.setText("Difficulty: "+"Hard");
             txtCategory.setText("Category: "+"Multiply");
             txtAnimOperator.setText("x");
         }
-        if(itemAsString.equals("Random|Easy"))
-        {
+        if(itemAsString.equals("Random|Easy")) {
             txtName.setText(sharedPreferences.getString("Random|Easy|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Random|Easy|Score",0))+"/"+String.valueOf(QuestionAmount_Random_Easy));
             txtDifficulty.setText("Difficulty: "+"Easy");
             txtCategory.setText("Category: " + "Random");
             txtAnimOperator.setText("?");
         }
-        if(itemAsString.equals("Random|Medium"))
-        {
+        if(itemAsString.equals("Random|Medium")) {
             txtName.setText(sharedPreferences.getString("Random|Medium|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Random|Medium|Score",0))+"/"+String.valueOf(QuestionAmount_Random_Medium));
             txtDifficulty.setText("Difficulty: "+"Medium");
             txtCategory.setText("Category: "+"Random");
             txtAnimOperator.setText("?");
         }
-        if(itemAsString.equals("Random|Hard"))
-        {
+        if(itemAsString.equals("Random|Hard")) {
             txtName.setText(sharedPreferences.getString("Random|Hard|Name","Name: -----"));
             txtScore.setText("Score: " + String.valueOf(sharedPreferences.getInt("Random|Hard|Score",0))+"/"+String.valueOf(QuestionAmount_Random_Hard));
             txtDifficulty.setText("Difficulty: "+"Hard");
@@ -274,17 +247,14 @@ public class HighScoresActivity extends AppCompatActivity
         }
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.statistics_options,menu);
         getMenuInflater().inflate(R.menu.home_options,menu);
         return true;
     }
         @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
 
             case R.id.btnback:
                 NavUtils.navigateUpFromSameTask(this);
