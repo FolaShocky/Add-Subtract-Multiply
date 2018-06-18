@@ -21,16 +21,14 @@ import static com.folashocky.add_subtract_multiply.OptionsRecylerViewAdapter.Tim
  * Created by folas on 27/02/2018.
  */
 
-public class OptionsActivity extends AppCompatActivity
-{
+public class OptionsActivity extends AppCompatActivity {
     ArrayList<Time> timeList;
     private static final int VERTICAL_ITEM_SPACE = 35;
     private Context context;
     public static SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     @Override
-    protected void onCreate(Bundle bundle)
-    {
+    protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_options);
         timeList = new ArrayList<>();
@@ -53,8 +51,7 @@ public class OptionsActivity extends AppCompatActivity
         optionsRecyclerView.addItemDecoration(new DividerOptionsRV(context));
     }
 
-    private void populateList()
-    {
+    private void populateList() {
         timeList.add(new Time(1,0));
         timeList.add(new Time(2,0));
         timeList.add(new Time(3,0));
@@ -75,26 +72,21 @@ public class OptionsActivity extends AppCompatActivity
         timeList.add(new Time(18,0));
         timeList.add(new Time(19,0));
         timeList.add(new Time(20,0));
-
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.btnback:
                 startActivity(new Intent(OptionsActivity.this,MainActivity.class));
                 return true;
             case R.id.btnsave:
-                if(TimeLimit.size()>0)
-                {
+                if(TimeLimit.size()>0) {
                     editor.putInt("minutes", TimeLimit.get(0));
                     editor.apply();
                     Toast.makeText(context,"Saved!",Toast.LENGTH_SHORT).show();
