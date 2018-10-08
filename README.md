@@ -1,2 +1,2 @@
 # Add-Subtract-Multiply
-This repository contains code from Add-Subtract-Multiply
+This repository contains code from an android application called Add-Subtract-Multiply, which has undergone several iterations. As part of the application, an algorithm is implemented, enabling the number of questions set for the player to be directly proportional to their time limit. For example, if the player decided to set the time limit to 2 minutes, they would have 40 questions. Whereas, if they decided to set it to 5, they would have 100 questions. 
